@@ -1,0 +1,665 @@
+{
+  "compatibilityLevel": 1567,
+  "model": {
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.128.751.0 (24.04)"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"processed_diamond_data\",\".Measures\"]"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "en-US",
+    "cultures": [
+      {
+        "name": "en-US",
+        "linguisticMetadata": {
+          "content": {
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "DateTableTemplate_8a61bca7-52bc-4aa9-8d9b-a1b1a63c2de0",
+        "annotations": [
+          {
+            "name": "__PBI_TemplateDateTable",
+            "value": "true"
+          },
+          {
+            "name": "DefaultItem",
+            "value": "DateHierarchy"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "e3a262a4-a6d8-4a93-9538-5cc65a4265ff",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "isHidden": true,
+            "lineageTag": "77957fad-fc2b-4f22-a6ae-a86ab100bc5a",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "isHidden": true,
+            "lineageTag": "81408dfe-8624-4612-8f21-8fd4cd985a0b",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "08c93f07-1ca8-447d-82bb-6b1bce5b569b",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "isHidden": true,
+            "lineageTag": "d4850998-c175-4980-b4c1-5d21fd4a2912",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "fe6f8a16-1ced-4f42-b390-88ed806181b2",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "isHidden": true,
+            "lineageTag": "5ca860f6-91a5-4d01-be05-887044199c72",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "a3dda830-a308-4355-a196-14f5388257f9",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "bf85ed20-cb2a-4a38-9131-5a9359da3af7",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "9601e1d7-9216-4d9e-9592-e4d5a5ab4033",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "3bc43cf4-5122-47ab-b008-4351031c5c57",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "fe79c9e1-ab72-4e1e-94ad-c98986a8c870"
+          }
+        ],
+        "isHidden": true,
+        "isPrivate": true,
+        "lineageTag": "a1f4a815-ea19-40cb-a705-3c5da07703b5",
+        "partitions": [
+          {
+            "name": "DateTableTemplate_8a61bca7-52bc-4aa9-8d9b-a1b1a63c2de0",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))",
+              "type": "calculated"
+            }
+          }
+        ]
+      },
+      {
+        "name": "processed_diamond_data",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "carat",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "DataType"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "b3e4b4c2-a252-4cea-a016-d42f8c595e7e",
+            "sourceColumn": "carat",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "cut",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "957766b4-a07b-486f-ba89-021032b9b556",
+            "sourceColumn": "cut",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "color",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "fa50c698-5d8a-46da-9d81-5b0d842f6719",
+            "sourceColumn": "color",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "clarity",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "a9babf7a-66f3-4cbc-b0ee-4bd9f37818e0",
+            "sourceColumn": "clarity",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "depth",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "double",
+            "formatString": "0.00",
+            "lineageTag": "4b0075f5-5f3f-4e32-a39c-81ccff3a6757",
+            "sourceColumn": "depth",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "table",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "0146f832-fd4d-4b59-85bc-129e97d59e61",
+            "sourceColumn": "table",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "price",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "2e34df19-8f62-4688-b465-0582673e9976",
+            "sourceColumn": "price",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "x",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "f835b00d-68f8-421e-80ab-cf48b3cd7bd8",
+            "sourceColumn": "x",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "y",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "76309ad8-4cba-4d4c-873c-49ee7ae8ae55",
+            "sourceColumn": "y",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "z",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "21d45e62-b159-42e0-a11e-cdeb4cbdaeca",
+            "sourceColumn": "z",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "xy",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "0763b0d1-30eb-4083-9105-61648bb708cb",
+            "sourceColumn": "xy",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "predictions",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"currencyCulture\":\"en-US\"}"
+              }
+            ],
+            "dataType": "double",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "lineageTag": "b5d6318e-e1f2-4271-b55f-3071a03256e8",
+            "sourceColumn": "predictions",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Index",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "SortByColumn"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "03617218-d5ea-4803-a995-0360172538a6",
+            "sourceColumn": "Index",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "difference",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"currencyCulture\":\"en-US\"}"
+              }
+            ],
+            "dataType": "double",
+            "expression": "processed_diamond_data[predictions] - processed_diamond_data[price]",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "isDataTypeInferred": true,
+            "lineageTag": "0fad93a8-b2e1-4be1-a795-f8207a92c2d0",
+            "summarizeBy": "sum",
+            "type": "calculated"
+          }
+        ],
+        "lineageTag": "f4209966-1ed2-447c-aea3-059ed6f23b5f",
+        "partitions": [
+          {
+            "name": "processed_diamond_data",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(\"C:\\Users\\connor.hanan\\workspace\\Python\\Projects\\diamond_price_prediction\\Resources\\processed_diamond_data\"),[Delimiter=\",\", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),",
+                "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"carat\", type number}, {\"cut\", type text}, {\"color\", type text}, {\"clarity\", type text}, {\"depth\", type number}, {\"table\", type number}, {\"price\", Int64.Type}, {\"x\", type number}, {\"y\", type number}, {\"z\", type number}, {\"xy\", type number}}),",
+                "    #\"Run Python script\" = Python.Execute(\"# 'dataset' holds the input data for this script#(lf)import pandas as pd#(lf)import pickle#(lf)#(lf)# Loading random forest model#(lf)file = open(r\"\"C:\\Users\\connor.hanan\\workspace\\Python\\Projects\\diamond_price_prediction\\Resources\\random_forest_model.pkl\"\", 'rb')#(lf)model = pickle.load(file)#(lf)#(lf)# Feature Engineering#(lf)d_dataset = pd.get_dummies(dataset)#(lf)d_dataset = d_dataset.dropna(axis=0)#(lf)X = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)#(lf)dataset['predictions'] = model.predict(X)\",[dataset=#\"Changed Type\"]),",
+                "    dataset = #\"Run Python script\"{[Name=\"dataset\"]}[Value],",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(dataset,{{\"carat\", type number}, {\"cut\", type text}, {\"color\", type text}, {\"clarity\", type text}, {\"depth\", type number}, {\"table\", type number}, {\"price\", Int64.Type}, {\"x\", type number}, {\"y\", type number}, {\"z\", type number}, {\"xy\", type number}, {\"predictions\", type number}}),",
+                "    #\"Added Index\" = Table.AddIndexColumn(#\"Changed Type1\", \"Index\", 0, 1, Int64.Type)",
+                "in",
+                "    #\"Added Index\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": ".Measures",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "lineageTag": "cea7b6ca-f99b-4972-943b-f6455c5e3227",
+        "measures": [
+          {
+            "name": "Average Difference",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"currencyCulture\":\"en-US\"}"
+              }
+            ],
+            "expression": "AVERAGEX('processed_diamond_data', [predictions] - [price])",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "lineageTag": "35aa6c7a-0731-4670-be9e-043af55b37fd"
+          },
+          {
+            "name": "Total Samples",
+            "expression": "COUNT('processed_diamond_data'[Index])",
+            "formatString": "0.00",
+            "lineageTag": "5df3bfda-7378-46f8-99c1-acadb76283c6"
+          },
+          {
+            "name": "Price",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"currencyCulture\":\"en-US\"}"
+              }
+            ],
+            "expression": "SUM(processed_diamond_data[price])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "lineageTag": "6b1cef43-2437-444a-bfbb-3766846ef3bb"
+          },
+          {
+            "name": "Prediction",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"currencyCulture\":\"en-US\"}"
+              }
+            ],
+            "expression": "SUM(processed_diamond_data[predictions])",
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "lineageTag": "0abcfc53-4f6f-4578-ae63-75d2303cb911"
+          },
+          {
+            "name": "Plot Markers Color",
+            "expression": [
+              "IF(",
+              "    [Difference] >= 'Error Threshold'[Error Threshold Value] || [Difference] <=- 'Error Threshold'[Error Threshold Value],",
+              "    \"70B0E0\",",
+              "    \"#FCB714\"",
+              ")"
+            ],
+            "lineageTag": "be9d66e0-d2cc-4551-96d7-7a4564a3f291"
+          },
+          {
+            "name": "Difference",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"currencyCulture\":\"en-US\"}"
+              }
+            ],
+            "expression": "SUM('processed_diamond_data'[difference])",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "lineageTag": "67a49c5f-8247-4233-8c2a-87d481961d97"
+          },
+          {
+            "name": "Error Threshold",
+            "expression": "VALUE('Error Threshold'[Error Threshold Value])",
+            "formatString": "0",
+            "lineageTag": "ebaa5fc9-9ce1-4f64-aca5-b9c2e2b44fd7"
+          }
+        ],
+        "partitions": [
+          {
+            "name": ".Measures",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText(\"i44FAA==\", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(Source,{{\"Column1\", type text}}),",
+                "    #\"Removed Columns\" = Table.RemoveColumns(#\"Changed Type\",{\"Column1\"})",
+                "in",
+                "    #\"Removed Columns\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Error Threshold",
+        "annotations": [
+          {
+            "name": "PBI_Id",
+            "value": "aff92a7c94dd468aa28159906b4b3ea6"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Error Threshold",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataType": "int64",
+            "extendedProperties": [
+              {
+                "name": "ParameterMetadata",
+                "type": "json",
+                "value": {
+                  "version": 0
+                }
+              }
+            ],
+            "formatString": "0",
+            "isDataTypeInferred": true,
+            "isNameInferred": false,
+            "lineageTag": "6d2b8166-303b-4427-859b-a90a0668835c",
+            "sourceColumn": "[Value]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          }
+        ],
+        "lineageTag": "9462f2b9-c6be-452b-96eb-88356c5acbaa",
+        "measures": [
+          {
+            "name": "Error Threshold Value",
+            "expression": "SELECTEDVALUE('Error Threshold'[Error Threshold])",
+            "formatString": "0",
+            "lineageTag": "8ef04a3a-51f4-4420-ab7b-21e16050459a"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Error Threshold",
+            "mode": "import",
+            "source": {
+              "expression": "GENERATESERIES(0, 5000, 100)",
+              "type": "calculated"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
