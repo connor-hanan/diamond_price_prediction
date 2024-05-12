@@ -97,4 +97,84 @@ df.head()
   </tbody>
 </table>
 </div>
-To analyze the correlation of our numerical values we first create a variable that contains all numerical columns, and then we
+
+## Feature Engineering
+In order to reduce the complexity of the data I create a ratio of two of two demensions and elect to drop the original columns
+```Python
+df['xy'] = df['x']/df['y'] 
+
+# Encode categorical variables into machine readable values
+d_df = pd.get_dummies(df)
+X = d_df.drop(['price', 'x', 'y', 'z'], axis=1) # Dropping target variable & highly correlated columns
+y = d_df['price']
+
+corr_heatmap(d_df.corr()) # Calling my correlation variable (see notebook)
+
+```
+### Correlation Heatmap
+![alt text](correlation_heatmap)
+
+## Model Results
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>RMSE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>KNN</th>
+      <td>1170.659452</td>
+    </tr>
+    <tr>
+      <th>MLR</th>
+      <td>1120.830488</td>
+    </tr>
+    <tr>
+      <th>RF</th>
+      <td>552.995054</td>
+    </tr>
+    <tr>
+      <th>Lasso</th>
+      <td>1120.723179</td>
+    </tr>
+    <tr>
+      <th>Null</th>
+      <td>3942.168776</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+As you can see the Random Forest has the best score which is the model I choose
+```Python
+# Save ML model to disk
+import pickle
+
+directory_path = r"..\workspace\projects\Diamond_Price_Prediction\Resources"
+file_name = 'random_forest_model.pkl'
+full_path = f"{directory_path}\\{file_name}"
+
+with open(full_path, 'wb') as file:
+    pickle.dump(knn, file)
+
+# Saving the processed data as a csv
+processed_data = 'processed_diamond_data'
+
+df.to_csv(f"{directory_path}\\{processed_data}", index=False)
+```
