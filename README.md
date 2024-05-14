@@ -115,6 +115,7 @@ corr_heatmap(d_df.corr()) # Calling my correlation variable (see notebook)
 ![alt text](correlation_heatmap)
 
 ## Model Results
+<div>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -163,4 +164,3 @@ with open(full_path, 'wb') as file:
 processed_data = 'processed_diamond_data'
 
 df.to_csv(f"{directory_path}\\{processed_data}", index=False)
-```
