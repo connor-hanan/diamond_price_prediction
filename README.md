@@ -112,7 +112,7 @@ corr_heatmap(d_df.corr()) # Calling my correlation variable (see notebook)
 
 ```
 ### Correlation Heatmap
-![alt text](correlation_heatmap)
+![alt text](resources/correlation_heatmap.png)
 
 ## Model Results
 <div>
