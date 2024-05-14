@@ -116,6 +116,7 @@ corr_heatmap(d_df.corr()) # Calling my correlation variable (see notebook)
 
 ## Model Results
 <div>
+
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
