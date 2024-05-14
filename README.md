@@ -142,7 +142,7 @@ corr_heatmap(d_df.corr()) # Calling my correlation variable (see notebook)
       <td>1120.723179</td>
     </tr>
     <tr>
-      <th>Null</th>
+      <th>Null(mean y value)</th>
       <td>3942.168776</td>
     </tr>
   </tbody>
@@ -154,7 +154,7 @@ As you can see the Random Forest has the best score which is the model I choose
 # Save ML model to disk
 import pickle
 
-directory_path = r"..\workspace\projects\Diamond_Price_Prediction\Resources"
+directory_path = r"..\workspace\projects\diamond_price_prediction\resources"
 file_name = 'random_forest_model.pkl'
 full_path = f"{directory_path}\\{file_name}"
 
