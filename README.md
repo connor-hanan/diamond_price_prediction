@@ -165,3 +165,37 @@ with open(full_path, 'wb') as file:
 processed_data = 'processed_diamond_data'
 
 df.to_csv(f"{directory_path}\\{processed_data}", index=False)
+```
+
+# PowerQuery
+The following code is me of loading the processed data into Power BI via M. It shows me importing the pickle model, engineering a few features, and then doing some final data prep before I declare the dataset variable. Finally, I change the data types so Power BI handles / stores the data properly and I add an index. The index is key as it will be used as the values on our plot.
+
+```M
+let
+    Source = Csv.Document(File.Contents("C:\Users\conno\workspace\projects\diamond_price_prediction\resources\processed_diamond_data"),[Delimiter=",", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+
+    RunPython = Python.Execute(
+        "# 'dataset' holds the input data for this script
+        #(lf)import pandas as pd 
+        #(lf)import pickle#(lf)
+
+        #(lf)# Loading random forest model
+        #(lf)file = open(r""C:\Users\conno\workspace\projects\diamond_price_prediction\resources\random_forest_model.pkl"", 'rb')
+        #(lf)model = pickle.load(file)#(lf)#(lf)
+
+        # Feature Engineering
+
+        #(lf)d_dataset = pd.get_dummies(dataset)
+        #(lf)d_dataset = d_dataset.dropna(axis=0)
+        #(lf)X = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)
+        #(lf)dataset['predictions'] = model.predict(X)",
+        [dataset=PromotedHeaders]
+    ),
+
+    dataset = RunPython{[Name="dataset"]}[Value],
+    ChangedType = Table.TransformColumnTypes(dataset,{{"carat", type number}, {"cut", type text}, {"color", type text}, {"clarity", type text}, {"depth", type number}, {"table", type number}, {"price", Int64.Type}, {"x", type number}, {"y", type number}, {"z", type number}, {"xy", type number}, {"predictions", type number}}),
+    AddedIndex = Table.AddIndexColumn(ChangedType, "Index", 0, 1, Int64.Type)
+in
+    AddedIndex
+```
