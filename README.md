@@ -166,9 +166,10 @@ processed_data = 'processed_diamond_data'
 
 df.to_csv(f"{directory_path}\\{processed_data}", index=False)
 ```
-- Before we move on to uploading our to Power BI via PowerQuery M I'd like to first look at the first few rows so I can see what the data is going to look like.
+- Before we move on to uploading our to Power BI via PowerQuery M, I'd like to  analyze the first few rows just so I can get an idea of what I'm working with.
 ```Python
-df.head()
+df.head() # Comparing the 'price' vs the 'predictions' column
+```
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -280,8 +281,6 @@ df.head()
   </tbody>
 </table>
 </div>
-```
-
 
 # PowerQuery
 The following code is me of loading the processed data into Power BI via M. It shows me importing the pickle model, engineering a few features, and then doing some final data prep before I declare the dataset variable. Finally, I change the data types so Power BI handles / stores the data properly and I add an index. The index is key as it will be used as the values on our plot.

@@ -8,7 +8,7 @@
       },
       {
         "name": "PBIDesktopVersion",
-        "value": "2.128.751.0 (24.04)"
+        "value": "2.129.905.0 (24.05)"
       },
       {
         "name": "PBI_QueryOrder",
@@ -33,6 +33,7 @@
       }
     ],
     "dataAccessOptions": {
+      "fastCombine": true,
       "legacyRedirects": true,
       "returnErrorValuesAsNull": true
     },
@@ -250,6 +251,10 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
@@ -489,10 +494,10 @@
             "source": {
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"C:\\Users\\connor.hanan\\workspace\\Python\\Projects\\diamond_price_prediction\\Resources\\processed_diamond_data\"),[Delimiter=\",\", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:\\Users\\conno\\workspace\\projects\\diamond_price_prediction\\resources\\processed_diamond_data\"),[Delimiter=\",\", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"carat\", type number}, {\"cut\", type text}, {\"color\", type text}, {\"clarity\", type text}, {\"depth\", type number}, {\"table\", type number}, {\"price\", Int64.Type}, {\"x\", type number}, {\"y\", type number}, {\"z\", type number}, {\"xy\", type number}}),",
-                "    #\"Run Python script\" = Python.Execute(\"# 'dataset' holds the input data for this script#(lf)import pandas as pd#(lf)import pickle#(lf)#(lf)# Loading random forest model#(lf)file = open(r\"\"C:\\Users\\connor.hanan\\workspace\\Python\\Projects\\diamond_price_prediction\\Resources\\random_forest_model.pkl\"\", 'rb')#(lf)model = pickle.load(file)#(lf)#(lf)# Feature Engineering#(lf)d_dataset = pd.get_dummies(dataset)#(lf)d_dataset = d_dataset.dropna(axis=0)#(lf)X = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)#(lf)dataset['predictions'] = model.predict(X)\",[dataset=#\"Changed Type\"]),",
+                "    #\"Run Python script\" = Python.Execute(\"# 'dataset' holds the input data for this script#(lf)import pandas as pd#(lf)import pickle#(lf)#(lf)# Loading random forest model#(lf)file = open(r\"\"C:\\Users\\conno\\workspace\\projects\\diamond_price_prediction\\resources\\random_forest_model.pkl\"\", 'rb')#(lf)model = pickle.load(file)#(lf)#(lf)# Feature Engineering#(lf)d_dataset = pd.get_dummies(dataset)#(lf)X = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)#(lf)#(lf)dataset['predictions'] = model.predict(X)\",[dataset=#\"Changed Type\"]),",
                 "    dataset = #\"Run Python script\"{[Name=\"dataset\"]}[Value],",
                 "    #\"Changed Type1\" = Table.TransformColumnTypes(dataset,{{\"carat\", type number}, {\"cut\", type text}, {\"color\", type text}, {\"clarity\", type text}, {\"depth\", type number}, {\"table\", type number}, {\"price\", Int64.Type}, {\"x\", type number}, {\"y\", type number}, {\"z\", type number}, {\"xy\", type number}, {\"predictions\", type number}}),",
                 "    #\"Added Index\" = Table.AddIndexColumn(#\"Changed Type1\", \"Index\", 0, 1, Int64.Type)",
