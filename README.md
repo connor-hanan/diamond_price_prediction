@@ -114,7 +114,9 @@ corr_heatmap(d_df.corr()) # Calling my correlation variable (see notebook)
 ### Correlation Heatmap
 ![alt text](resources/correlation_heatmap.png)
 
-## Model Results
+# Model Evaluation
+## RMSE results
+- Think of RMSE as the average error of the predicted metric
 <div>
 
 <table border="1" class="dataframe">
@@ -149,26 +151,76 @@ corr_heatmap(d_df.corr()) # Calling my correlation variable (see notebook)
 </table>
 </div>
 
-As you can see the Random Forest has the best score which is the model I choose
+## R2 results
+- The closer the model is to 1 the better the model is
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>R2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>KNN</th>
+      <td>0.91133</td>
+    </tr>
+    <tr>
+      <th>MLR</th>
+      <td>0.918722</td>
+    </tr>
+    <tr>
+      <th>RF</th>
+      <td>0.980161</td>
+    </tr>
+    <tr>
+      <th>Lasso</th>
+      <td>0.918734</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+# Exporting model
 ```Python
 # Save ML model to disk
 import pickle
+import os
 
-directory_path = r"..\workspace\projects\diamond_price_prediction\resources"
-file_name = 'random_forest_model.pkl'
-full_path = f"{directory_path}\\{file_name}"
+# Directory path and file names
+directory_path = r"C:\Users\conno\workspace\projects\diamond_price_prediction\resources"
+model_file_name = 'random_forest_model.pkl'
+scaler_file_name = 'scaler.pkl'
+processed_data_file_name = 'processed_diamond_data.csv'
 
-with open(full_path, 'wb') as file:
-    pickle.dump(knn, file)
+# Full paths
+model_full_path = os.path.join(directory_path, model_file_name)
+scaler_full_path = os.path.join(directory_path, scaler_file_name)
+data_full_path = os.path.join(directory_path, processed_data_file_name)
+
+# Save ML model to disk
+with open(model_full_path, 'wb') as model_file:
+    pickle.dump(rf, model_file)
+
+with open(scaler_full_path, 'wb') as scaler_file:
+    pickle.dump(s, scaler_file)
 
 # Saving the processed data as a csv
-processed_data = 'processed_diamond_data'
-
-df.to_csv(f"{directory_path}\\{processed_data}", index=False)
-```
-- Before we move on to uploading our to Power BI via PowerQuery M, I'd like to  analyze the first few rows just so I can get an idea of what I'm working with.
-```Python
-df.head() # Comparing the 'price' vs the 'predictions' column
+df.to_csv(data_full_path, index=False)
 ```
 <div>
 <style scoped>
@@ -283,34 +335,41 @@ df.head() # Comparing the 'price' vs the 'predictions' column
 </div>
 
 # PowerQuery
-The following code is me of loading the processed data into Power BI via M. It shows me importing the pickle model, engineering a few features, and then doing some final data prep before I declare the dataset variable. Finally, I change the data types so Power BI handles / stores the data properly and I add an index. The index is key as it will be used as the values on our plot.
-
+The following moduel is me importing the model I created and exported in the project notebook and loading said model into Power BI via PowerQuery.
+  - The Python code after is the actual Python script itself, step 'Run_Python_script', but in a more readable format
 ```M
 let
-    Source = Csv.Document(File.Contents("C:\Users\conno\workspace\projects\diamond_price_prediction\resources\processed_diamond_data"),[Delimiter=",", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+    Source = Csv.Document(File.Contents("C:\Users\conno\workspace\projects\diamond_price_prediction\resources\processed_diamond_data.csv"),[Delimiter=",", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),
     PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 
-    RunPython = Python.Execute(
-        "# 'dataset' holds the input data for this script
-        #(lf)import pandas as pd 
-        #(lf)import pickle#(lf)
+    Run_Python_script = Python.Execute("# 'dataset' holds the input data for this script#(lf)import pandas as pd#(lf)import pickle#(lf)#(lf)# Loading random forest model & scaler#(lf)file_path = r""C:\Users\conno\workspace\projects\diamond_price_prediction\resources\random_forest_model.pkl""#(lf)scaler_path = r""C:\Users\conno\workspace\projects\diamond_price_prediction\resources\scaler.pkl""#(lf)with open(file_path, 'rb') as file:#(lf)    model = pickle.load(file)#(lf)with open(scaler_path, 'rb') as scaler_file:#(lf)    scaler = pickle.load(scaler_file)#(lf)#(lf)# Feature Engineering#(lf)d_dataset = pd.get_dummies(dataset)#(lf)d_dataset = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)#(lf)X = scaler.transform(d_dataset)#(lf)#(lf)# Make predictions#(lf)dataset['predictions'] = model.predict(X)",[dataset=PromotedHeaders]),
+    dataset = Run_Python_script{[Name="dataset"]}[Value],
 
-        #(lf)# Loading random forest model
-        #(lf)file = open(r""C:\Users\conno\workspace\projects\diamond_price_prediction\resources\random_forest_model.pkl"", 'rb')
-        #(lf)model = pickle.load(file)#(lf)#(lf)
-
-        # Feature Engineering
-
-        #(lf)d_dataset = pd.get_dummies(dataset)
-        #(lf)d_dataset = d_dataset.dropna(axis=0)
-        #(lf)X = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)
-        #(lf)dataset['predictions'] = model.predict(X)",
-        [dataset=PromotedHeaders]
-    ),
-
-    dataset = RunPython{[Name="dataset"]}[Value],
-    ChangedType = Table.TransformColumnTypes(dataset,{{"carat", type number}, {"cut", type text}, {"color", type text}, {"clarity", type text}, {"depth", type number}, {"table", type number}, {"price", Int64.Type}, {"x", type number}, {"y", type number}, {"z", type number}, {"xy", type number}, {"predictions", type number}}),
-    AddedIndex = Table.AddIndexColumn(ChangedType, "Index", 0, 1, Int64.Type)
+    // The index will serve as our data points on the scatter plot
+    Added_Index = Table.AddIndexColumn(dataset, "Index", 0, 1, Int64.Type),
+    Changed_DType = Table.TransformColumnTypes(Added_Index,{{"carat", type number}, {"cut", type text}, {"color", type text}, {"clarity", type text}, {"depth", type number}, {"table", type number}, {"price", Int64.Type}, {"x", type number}, {"y", type number}, {"z", type number}, {"xy", type number}, {"predictions", Int64.Type}})
 in
-    AddedIndex
+    Changed_DType
+```
+
+```Python
+# 'dataset' holds the input data for this script
+import pandas as pd
+import pickle
+
+# Loading random forest model & scaler
+file_path = r"C:\Users\conno\workspace\projects\diamond_price_prediction\resources\random_forest_model.pkl"
+scaler_path = r"C:\Users\conno\workspace\projects\diamond_price_prediction\resources\scaler.pkl"
+with open(file_path, 'rb') as file:
+    model = pickle.load(file)
+with open(scaler_path, 'rb') as scaler_file:
+    scaler = pickle.load(scaler_file)
+
+# Feature Engineering
+d_dataset = pd.get_dummies(dataset)
+d_dataset = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)
+X = scaler.transform(d_dataset)
+
+# Make predictions
+dataset['predictions'] = model.predict(X)
 ```
