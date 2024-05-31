@@ -39,7 +39,7 @@
   "sections": [
     {
       "config": "{}",
-      "displayName": "Model",
+      "displayName": "Diamond Prediction Model",
       "displayOption": 1,
       "filters": "[]",
       "height": 720.00,

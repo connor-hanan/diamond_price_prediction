@@ -8,7 +8,7 @@
       },
       {
         "name": "PBIDesktopVersion",
-        "value": "2.129.905.0 (24.05)"
+        "value": "2.129.1229.0 (24.05)"
       },
       {
         "name": "PBI_QueryOrder",
@@ -440,7 +440,7 @@
                 "value": "{\"currencyCulture\":\"en-US\"}"
               }
             ],
-            "dataType": "double",
+            "dataType": "int64",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "lineageTag": "b5d6318e-e1f2-4271-b55f-3071a03256e8",
             "sourceColumn": "predictions",
@@ -477,7 +477,7 @@
                 "value": "{\"currencyCulture\":\"en-US\"}"
               }
             ],
-            "dataType": "double",
+            "dataType": "int64",
             "expression": "processed_diamond_data[predictions] - processed_diamond_data[price]",
             "formatString": "\\$#,0;(\\$#,0);\\$#,0",
             "isDataTypeInferred": true,
@@ -494,15 +494,17 @@
             "source": {
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"C:\\Users\\conno\\workspace\\projects\\diamond_price_prediction\\resources\\processed_diamond_data\"),[Delimiter=\",\", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),",
-                "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"carat\", type number}, {\"cut\", type text}, {\"color\", type text}, {\"clarity\", type text}, {\"depth\", type number}, {\"table\", type number}, {\"price\", Int64.Type}, {\"x\", type number}, {\"y\", type number}, {\"z\", type number}, {\"xy\", type number}}),",
-                "    #\"Run Python script\" = Python.Execute(\"# 'dataset' holds the input data for this script#(lf)import pandas as pd#(lf)import pickle#(lf)#(lf)# Loading random forest model#(lf)file = open(r\"\"C:\\Users\\conno\\workspace\\projects\\diamond_price_prediction\\resources\\random_forest_model.pkl\"\", 'rb')#(lf)model = pickle.load(file)#(lf)#(lf)# Feature Engineering#(lf)d_dataset = pd.get_dummies(dataset)#(lf)X = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)#(lf)#(lf)dataset['predictions'] = model.predict(X)\",[dataset=#\"Changed Type\"]),",
-                "    dataset = #\"Run Python script\"{[Name=\"dataset\"]}[Value],",
-                "    #\"Changed Type1\" = Table.TransformColumnTypes(dataset,{{\"carat\", type number}, {\"cut\", type text}, {\"color\", type text}, {\"clarity\", type text}, {\"depth\", type number}, {\"table\", type number}, {\"price\", Int64.Type}, {\"x\", type number}, {\"y\", type number}, {\"z\", type number}, {\"xy\", type number}, {\"predictions\", type number}}),",
-                "    #\"Added Index\" = Table.AddIndexColumn(#\"Changed Type1\", \"Index\", 0, 1, Int64.Type)",
+                "    Source = Csv.Document(File.Contents(\"C:\\Users\\conno\\workspace\\projects\\diamond_price_prediction\\resources\\processed_diamond_data.csv\"),[Delimiter=\",\", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),",
+                "    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "",
+                "    Run_Python_script = Python.Execute(\"# 'dataset' holds the input data for this script#(lf)import pandas as pd#(lf)import pickle#(lf)#(lf)# Loading random forest model & scaler#(lf)file_path = r\"\"C:\\Users\\conno\\workspace\\projects\\diamond_price_prediction\\resources\\random_forest_model.pkl\"\"#(lf)scaler_path = r\"\"C:\\Users\\conno\\workspace\\projects\\diamond_price_prediction\\resources\\scaler.pkl\"\"#(lf)with open(file_path, 'rb') as file:#(lf)    model = pickle.load(file)#(lf)with open(scaler_path, 'rb') as scaler_file:#(lf)    scaler = pickle.load(scaler_file)#(lf)#(lf)# Feature Engineering#(lf)d_dataset = pd.get_dummies(dataset)#(lf)d_dataset = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)#(lf)X = scaler.transform(d_dataset)#(lf)#(lf)# Make predictions#(lf)dataset['predictions'] = model.predict(X)\",[dataset=PromotedHeaders]),",
+                "    dataset = Run_Python_script{[Name=\"dataset\"]}[Value],",
+                "",
+                "    // The index will serve as our data points on the scatter plot",
+                "    Added_Index = Table.AddIndexColumn(dataset, \"Index\", 0, 1, Int64.Type),",
+                "    Changed_DType = Table.TransformColumnTypes(Added_Index,{{\"carat\", type number}, {\"cut\", type text}, {\"color\", type text}, {\"clarity\", type text}, {\"depth\", type number}, {\"table\", type number}, {\"price\", Int64.Type}, {\"x\", type number}, {\"y\", type number}, {\"z\", type number}, {\"xy\", type number}, {\"predictions\", Int64.Type}})",
                 "in",
-                "    #\"Added Index\""
+                "    Changed_DType"
               ],
               "type": "m"
             }
