@@ -347,3 +347,8 @@ X = scaler.transform(d_dataset)
 # Make predictions
 dataset['predictions'] = model.predict(X)
 ```
+
+# Power BI
+- Finally, it's time to load the model into Power BI for the final report. After some inital data modeling & measure development we reach a clean, easy to undertand report that's ready for end user consumption. Feel free to clone the repo and explore the report on your own.
+
+![alt text](resources/report_screenshot.png)
