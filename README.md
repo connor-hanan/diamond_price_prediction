@@ -1,14 +1,14 @@
 # Project Overview
 ---
-Using everyones favorite Diamond dataset, I was able to predict the selling price of the Diamonds in the data with a high degree of accuracy wiht the variables I was given. 
+Using everyone's favorite Diamond dataset, I was able to predict the selling price of the diamonds in the data with a high degree of accuracy using the variables I was given.
 ### Tools
 - Python was used to transform, explore, evaluate the data, and to build the machine learning model.
   - Powershell was used to create a custom 'Conda' virtual enviroment and to install all the nessecary packages.
 - PowerBI was used to visualize the data and the model results.
 ## Python
-In the following section I'll walkthrough key points of the project as well as some of the code.
+In the following section, I'll walk through key points of the project as well as some of the code.
 ---
-To give you an idea of what the data looks like I'll first display the first 5 rows out of the 53,940 in the entire dataset.
+Let's take a look at the data before we proceed further.
 ```python
 df.head()
 ```
@@ -98,25 +98,27 @@ df.head()
 </table>
 </div>
 
-## Feature Engineering
-In order to reduce the complexity of the data I create a ratio of two of two demensions and elect to drop the original columns
+### Feature Correlation
+To reduce the complexity of the data, I created a ratio of two dimensions and chose to drop the original columns.
 ```Python
-df['xy'] = df['x']/df['y'] 
-
-# Encode categorical variables into machine readable values
+# Encoding categorical variables into machine readable values
 d_df = pd.get_dummies(df)
-X = d_df.drop(['price', 'x', 'y', 'z'], axis=1) # Dropping target variable & highly correlated columns
-y = d_df['price']
-
-corr_heatmap(d_df.corr()) # Calling my correlation variable (see notebook)
-
+corr_heatmap(d_df.corr()) # Calling heatmap plotting function (see notebook)
 ```
-### Correlation Heatmap
+#### Correlation Heatmap
 ![alt text](resources/correlation_heatmap.png)
 
+## Feature Engineering
+```Python
+df['xy'] = df['x']/df['y']
+X = d_df.drop(['price', 'x', 'y', 'z'], axis=1) # Dropping target variable & highly correlated columns
+y = d_df['price']
+```
+
 # Model Evaluation
+The actual process of building the model isn't very exciting. If you're curious, you can see the project notebook located in the 'resources' directory.
 ## RMSE results
-- Think of RMSE as the average error of the predicted metric
+- Think of RMSE as the average difference between the predicted values and the actual values.
 <div>
 
 <table border="1" class="dataframe">
@@ -152,7 +154,7 @@ corr_heatmap(d_df.corr()) # Calling my correlation variable (see notebook)
 </div>
 
 ## R2 results
-- The closer the model is to 1 the better the model is
+- The closer the R2 value is to 1, the better the model fits the data.
 <div>
 <table border="1" class="dataframe">
   <thead>
@@ -309,19 +311,36 @@ df.to_csv(data_full_path, index=False)
 </div>
 
 # PowerQuery
-The following moduel is me importing the model I created and exported in the project notebook and loading said model into Power BI via PowerQuery.
-  - The Python code after is the actual Python script itself, step 'Run_Python_script', but in a more readable format
-```M
+The following module shows how I imported the model I created and exported in the project notebook, then loaded it into Power BI using PowerQuery.
+  - The Python code below is the actual script from the 'Run_Python_script' step, but presented in a more readable format.
+```PowerQuery
 let
     Source = Csv.Document(File.Contents("C:\Users\conno\workspace\projects\diamond_price_prediction\resources\processed_diamond_data.csv"),[Delimiter=",", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),
     PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 
-    Run_Python_script = Python.Execute("# 'dataset' holds the input data for this script#(lf)import pandas as pd#(lf)import pickle#(lf)#(lf)# Loading random forest model & scaler#(lf)file_path = r""C:\Users\conno\workspace\projects\diamond_price_prediction\resources\random_forest_model.pkl""#(lf)scaler_path = r""C:\Users\conno\workspace\projects\diamond_price_prediction\resources\scaler.pkl""#(lf)with open(file_path, 'rb') as file:#(lf)    model = pickle.load(file)#(lf)with open(scaler_path, 'rb') as scaler_file:#(lf)    scaler = pickle.load(scaler_file)#(lf)#(lf)# Feature Engineering#(lf)d_dataset = pd.get_dummies(dataset)#(lf)d_dataset = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)#(lf)X = scaler.transform(d_dataset)#(lf)#(lf)# Make predictions#(lf)dataset['predictions'] = model.predict(X)",[dataset=PromotedHeaders]),
+    Run_Python_script = Python.Execute("# 'dataset' holds the input data for this script#(lf)
+      import pandas as pd#(lf)
+      import pickle#(lf)#(lf)# Loading random forest model & scaler#(lf)
+      file_path = r""C:\Users\conno\workspace\projects\diamond_price_prediction\resources\random_forest_model.pkl""#(lf)
+      scaler_path = r""C:\Users\conno\workspace\projects\diamond_price_prediction\resources\scaler.pkl""#(lf)
+      with open(file_path, 'rb') as file:#(lf)
+          model = pickle.load(file)#(lf)
+      with open(scaler_path, 'rb') as scaler_file:#(lf)
+        scaler = pickle.load(scaler_file)#(lf)#(lf)
+      # Feature Engineering#(lf)
+      d_dataset = pd.get_dummies(dataset)#(lf)
+      d_dataset = d_dataset.drop(['price', 'x', 'y', 'z'], axis=1)#(lf)
+      X = scaler.transform(d_dataset)#(lf)#(lf)
+      # Make predictions#(lf)
+      dataset['predictions'] = model.predict(X)",[dataset=PromotedHeaders]
+    ),
     dataset = Run_Python_script{[Name="dataset"]}[Value],
 
     // The index will serve as our data points on the scatter plot
     Added_Index = Table.AddIndexColumn(dataset, "Index", 0, 1, Int64.Type),
-    Changed_DType = Table.TransformColumnTypes(Added_Index,{{"carat", type number}, {"cut", type text}, {"color", type text}, {"clarity", type text}, {"depth", type number}, {"table", type number}, {"price", Int64.Type}, {"x", type number}, {"y", type number}, {"z", type number}, {"xy", type number}, {"predictions", Int64.Type}})
+    Changed_DType = Table.TransformColumnTypes(Added_Index,
+      {{"carat", type number}, {"cut", type text}, {"color", type text}, {"clarity", type text}, {"depth", type number}, {"table", type number}, {"price", Int64.Type}, {"x", type number}, {"y", type number}, {"z", type number}, {"xy", type number}, {"predictions", Int64.Type}}
+    )
 in
     Changed_DType
 ```
@@ -349,6 +368,6 @@ dataset['predictions'] = model.predict(X)
 ```
 
 # Power BI
-- Finally, it's time to load the model into Power BI for the final report. After some inital data modeling & measure development we reach a clean, easy to undertand report that's ready for end user consumption. Feel free to clone the repo and explore the report on your own.
+- Finally, it's time to load the model into Power BI for the final report. After some initial data modeling and measure development, we have a clean, easy-to-understand report that's ready for end-user consumption.
 
 ![alt text](resources/report_screenshot.png)
